@@ -12,6 +12,8 @@ public class UIText : MonoBehaviour
     static UIText main;
     static List<string> gameLog = new List<string>();
     int logLength = 20;
+    float _defaultSpeed = 5;
+    float _fadeSpeed;
 
     private void Start()
     {
@@ -21,6 +23,7 @@ public class UIText : MonoBehaviour
             //text = GetComponent<TextMeshProUGUI>();
         }
         else Destroy(this);
+        _fadeSpeed = _defaultSpeed;
         _alpha = 0;
         text.color = new Color(text.color.r, text.color.g, text.color.b, 0);
     }
@@ -29,13 +32,22 @@ public class UIText : MonoBehaviour
     {
         if (_alpha > 0)
         {
-            _alpha -= 0.2f * Time.deltaTime;
+            _alpha -= Time.deltaTime / _fadeSpeed;
             text.color = new Color(text.color.r, text.color.g, text.color.b, _alpha);
         }
     }
 
     void UpdateText(string newText)
     {
+        _fadeSpeed = _defaultSpeed;
+        text.text = newText;
+        _alpha = 1;
+        text.color = new Color(text.color.r, text.color.g, text.color.b, _alpha);
+    }
+
+    void UpdateText(string newText, float speed)
+    {
+        _fadeSpeed = speed;
         text.text = newText;
         _alpha = 1;
         text.color = new Color(text.color.r, text.color.g, text.color.b, _alpha);
@@ -44,6 +56,10 @@ public class UIText : MonoBehaviour
     public static void DisplayText(string newText)
     {
         main.UpdateText(newText);
+    }
+    public static void DisplayText(string newText, float speed)
+    {
+        main.UpdateText(newText, speed);
     }
     public static void LogText(string text)
     {
@@ -59,6 +75,5 @@ public class UIText : MonoBehaviour
             }
             main.logText.text = output;
         }
-
     }
 }

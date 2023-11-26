@@ -1,17 +1,23 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 
-public enum Turn {Player, AI }
+//public enum Turn {Player, AI }
 
 public class GameController : MonoBehaviour
 {
-    [SerializeField] Monster player;
-    [SerializeField] Monster opponent;
-    static GameController main;
-    [SerializeField] List<Action> permanentActions;
-    [SerializeField] List<Action> tempActions;
-    public Turn turn { get; private set; }
+    [SerializeField] Monster _player;
+    [SerializeField] Monster _opponent;
+    public static GameController main;
+    [SerializeField] List<Attack> _permanentActions;
+    [SerializeField] List<Attack> _tempActions;
+    bool _playerTurn;
+    public Monster Turn { get => _playerTurn?_player : _opponent; }
+    public static Action OnEndTurn;
+
+
 
     // Start is called before the first frame update
     void Awake()
@@ -22,33 +28,50 @@ public class GameController : MonoBehaviour
             Destroy(this);
     }
 
-    // Update is called once per frame
-    void Update()
+    private void Start()
     {
-        
+        OnEndTurn += AnnounceTurn;
+        AnnounceTurn();
     }
 
     public static Monster GetPlayer()
     {
-        return main.player;
+        return main._player;
     }
 
     public static Monster GetOpponent()
     {
-        return main.opponent;
+        return main._opponent;
     }
 
-    public static List<Action> GetFixedActions()
+    public void EndTurn(Monster requestor)
     {
-        if (main.permanentActions.Count > 0)
-            return main.permanentActions;
+        if (requestor == Turn)
+        {
+            _playerTurn = !_playerTurn;
+            OnEndTurn?.Invoke();
+        }
+    }
+
+    public static List<Attack> GetFixedActions()
+    {
+        if (main._permanentActions.Count > 0)
+            return main._permanentActions;
         return null;
     }
 
-    public static Action GetNewAction()
+    public static Attack GetNewAction()
     {
-        if (main.tempActions.Count > 0)
-            return (main.tempActions[Random.Range(0, main.tempActions.Count)]);
+        if (main._tempActions.Count > 0)
+            return (main._tempActions[UnityEngine.Random.Range(0, main._tempActions.Count)]);
         return null;
+    }
+
+    async void AnnounceTurn()
+    {
+        UIText.DisplayText("Ready!", 1);
+        await Task.Delay(1000);
+        UIText.DisplayText(Turn.name + " Turn");
+        await Task.Delay(1000);
     }
 }

@@ -9,19 +9,29 @@ public class Monster : MonoBehaviour
     [SerializeField] int _maxHealth { get; } = 100;
     [SerializeField] int _actions  = 5;
     [SerializeField] int _maxActions { get; } = 10;
+    [SerializeField] int _ApRechargeRate;
     List<Modifier> _modifiers = new List<Modifier>();
+
+    string _name;
+    int _defence;
 
     public int Health { get { return _health; } }
     public int AP { get { return _actions; } }
-    string _name;
+    
 
     // Start is called before the first frame update
     void Start()
     {
         if (GameController.GetPlayer() == this)
-            _name = "player";
+            _name = "Player";
         else
             _name = "Opponent";
+        GameController.OnEndTurn += NewTurn;
+    }
+
+    private void OnDestroy()
+    {
+        GameController.OnEndTurn -= NewTurn;
     }
 
     public bool ActionCost(int cost)
@@ -34,7 +44,36 @@ public class Monster : MonoBehaviour
         return false;
     }
 
-    public void ApplyAction(Action action)
+    void NewTurn()
+    {
+        if (GameController.main.Turn == this)
+        {
+            _defence = 0;
+            _actions += _ApRechargeRate;
+            foreach (Modifier modifier in _modifiers)
+            {
+                _health += modifier._hp;
+                _actions += modifier._ap;
+                _defence += modifier._def;
+                modifier._duration--;
+                if (modifier._duration <= 0)
+                    _modifiers.Remove(modifier);
+            }
+        }
+    }
+
+    public void Defend(Attack action)
+    {
+        if (Random.Range(0, 10) <= _defence)
+            ApplyAction(action);
+        else
+        {
+            UIText.DisplayText("Blocked");
+            UIText.LogText("Blocked");
+        }
+    }
+
+    public void ApplyAction(Attack action)
     {
         if (action != null)
         {

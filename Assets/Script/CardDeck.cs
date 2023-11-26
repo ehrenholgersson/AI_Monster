@@ -11,7 +11,7 @@ public class CardDeck : MonoBehaviour
     {
         {
             int i = 0;
-            foreach (Action action in GameController.GetFixedActions())
+            foreach (Attack action in GameController.GetFixedActions())
             {
                 if (i >= _hand.Length)
                     break;

@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
-[CreateAssetMenu(fileName ="New action", menuName ="Monster/Action")]
-public class Action : ScriptableObject
+[CreateAssetMenu(fileName ="New Attack", menuName ="Monster/Attack")]
+public class Attack : ScriptableObject
 {
 
     public bool permanent;

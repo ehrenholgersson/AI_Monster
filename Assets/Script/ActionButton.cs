@@ -7,7 +7,7 @@ using UnityEngine.UI;
 public class ActionButton : MonoBehaviour
 {
     [SerializeField] Button _button;
-    [SerializeField] Action _action;
+    [SerializeField] Attack _action;
     public void Click()
     {
         if (GameController.GetPlayer().ActionCost(_action.cost))
@@ -19,7 +19,7 @@ public class ActionButton : MonoBehaviour
         }
     }
 
-    public void SetAction(Action action)
+    public void SetAction(Attack action)
     {
         _action = action;
     }
