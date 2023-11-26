@@ -304,6 +304,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2dcf308ced07e05499a42fe2e1053ada, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  PermCol: {r: 0.5, g: 0.5, b: 0.5, a: 0.78431374}
+  HealCol: {r: 0.6745098, g: 1, b: 0, a: 0.78431374}
+  BuffCol: {r: 0.7075472, g: 0.6656937, b: 0, a: 0.78431374}
+  DefCol: {r: 0, g: 0.6627451, b: 1, a: 0.78431374}
+  AtkCol: {r: 0.6981132, g: 0.010976552, b: 0.010976552, a: 0.78431374}
   _button: {fileID: 7500051320575436445}
   _action: {fileID: 0}
 --- !u!1 &5036033576377292713

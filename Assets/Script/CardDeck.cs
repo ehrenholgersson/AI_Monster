@@ -35,5 +35,35 @@ public class CardDeck : MonoBehaviour
                 rect.localPosition = new Vector3(rect.localPosition.x + (Mathf.Abs(rect.rect.width) * i), rect.localPosition.y, rect.localPosition.z);
             }
         }
+        GameController.OnNewTurn += NewTurn;
     }
+
+    private void OnDestroy()
+    {
+        GameController.OnNewTurn -= NewTurn;
+    }
+
+    void DrawCards()
+    {
+        for (int i = 0; i < _hand.Length; i++)
+        {
+            if (_hand[i] == null)
+            {
+                _hand[i] = Instantiate(_cardPrefab);
+                _hand[i].transform.SetParent(transform, false);
+                RectTransform rect = _hand[i].GetComponent<RectTransform>();
+                rect.localPosition = new Vector3(rect.localPosition.x + (Mathf.Abs(rect.rect.width) * i), rect.localPosition.y, rect.localPosition.z);
+            }
+        }
+    }
+
+    void NewTurn()
+    {
+        if (GameController.main.Turn == GameController.GetPlayer())
+        {
+            DrawCards();
+        }
+    }
+
+
 }

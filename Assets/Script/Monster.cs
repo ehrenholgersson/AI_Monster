@@ -1,5 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -13,10 +15,12 @@ public class Monster : MonoBehaviour
     List<Modifier> _modifiers = new List<Modifier>();
 
     string _name;
-    int _defence;
+    int _defence = 0;
 
     public int Health { get { return _health; } }
     public int AP { get { return _actions; } }
+    public int Modifiers { get => _modifiers.Count; }
+    public int Defence { get => _defence; }
     
 
     // Start is called before the first frame update
@@ -26,12 +30,12 @@ public class Monster : MonoBehaviour
             _name = "Player";
         else
             _name = "Opponent";
-        GameController.OnEndTurn += NewTurn;
+        GameController.OnNewTurn += NewTurn;
     }
 
     private void OnDestroy()
     {
-        GameController.OnEndTurn -= NewTurn;
+        GameController.OnNewTurn -= NewTurn;
     }
 
     public bool ActionCost(int cost)
@@ -50,7 +54,7 @@ public class Monster : MonoBehaviour
         {
             _defence = 0;
             _actions += _ApRechargeRate;
-            foreach (Modifier modifier in _modifiers)
+            foreach (Modifier modifier in _modifiers.ToList())
             {
                 _health += modifier._hp;
                 _actions += modifier._ap;
@@ -64,12 +68,12 @@ public class Monster : MonoBehaviour
 
     public void Defend(Attack action)
     {
-        if (Random.Range(0, 10) <= _defence)
+        if (_defence <= Random.Range(0, 10))
             ApplyAction(action);
         else
         {
             UIText.DisplayText("Blocked");
-            UIText.LogText("Blocked");
+            UIText.LogText(_name +" Blocked an Attack");
         }
     }
 
@@ -80,9 +84,10 @@ public class Monster : MonoBehaviour
             {
                 _health += action.health;
                 _actions += action.ap;
+                _defence += action.defence;
                 foreach (Modifier modifier in action.modifiers)
                 {
-                    _modifiers.Add(modifier);
+                    _modifiers.Add(new Modifier(modifier));
                 }
             }
         }

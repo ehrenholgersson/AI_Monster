@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -15,16 +16,23 @@ public class UIText : MonoBehaviour
     float _defaultSpeed = 5;
     float _fadeSpeed;
 
-    private void Start()
+    private void Awake()
     {
         if (main == null)
         {
             main = this;
-            //text = GetComponent<TextMeshProUGUI>();
         }
-        else Destroy(this);
-        _fadeSpeed = _defaultSpeed;
+        else
+        {
+            Debug.Log("This text hadler is a duplicate of " + main.gameObject.name);
+            Destroy(this);
+        }
+        //_fadeSpeed = _defaultSpeed;
         _alpha = 0;
+    }
+    void Start()
+    {
+
         text.color = new Color(text.color.r, text.color.g, text.color.b, 0);
     }
     // Update is called once per frame
@@ -59,7 +67,10 @@ public class UIText : MonoBehaviour
     }
     public static void DisplayText(string newText, float speed)
     {
-        main.UpdateText(newText, speed);
+        if (main != null)
+            main.UpdateText(newText, speed);
+        else
+            Debug.Log("UI Text Handler is broken :(");
     }
     public static void LogText(string text)
     {

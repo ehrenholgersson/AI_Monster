@@ -15,7 +15,7 @@ public class GameController : MonoBehaviour
     [SerializeField] List<Attack> _tempActions;
     bool _playerTurn;
     public Monster Turn { get => _playerTurn?_player : _opponent; }
-    public static Action OnEndTurn;
+    public static Action OnNewTurn;
 
 
 
@@ -30,8 +30,14 @@ public class GameController : MonoBehaviour
 
     private void Start()
     {
-        OnEndTurn += AnnounceTurn;
-        AnnounceTurn();
+        OnNewTurn += AnnounceTurn;
+        DelayedStart();
+    }
+
+    async void DelayedStart()
+    {
+        await Task.Delay(1000);
+        OnNewTurn?.Invoke();
     }
 
     public static Monster GetPlayer()
@@ -49,7 +55,7 @@ public class GameController : MonoBehaviour
         if (requestor == Turn)
         {
             _playerTurn = !_playerTurn;
-            OnEndTurn?.Invoke();
+            OnNewTurn?.Invoke();
         }
     }
 
@@ -72,6 +78,7 @@ public class GameController : MonoBehaviour
         UIText.DisplayText("Ready!", 1);
         await Task.Delay(1000);
         UIText.DisplayText(Turn.name + " Turn");
+        UIText.LogText("Its " + Turn.name + "s Turn");
         await Task.Delay(1000);
     }
 }

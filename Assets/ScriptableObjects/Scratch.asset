@@ -9,13 +9,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f30f709fefbd8c9479e86bf843c2944e, type: 3}
-  m_Name: Do Nothing
+  m_Script: {fileID: 11500000, guid: 8b5ad509474a9bf41ab1498ec8975c0c, type: 3}
+  m_Name: Scratch
   m_EditorClassIdentifier: 
-  permanent: 0
-  targetSelf: 1
-  cost: 0
-  health: 0
-  ap: 1
+  permanent: 1
+  targetSelf: 0
+  cost: 1
+  health: -5
+  ap: 0
   modifiers: []
-  description: Rest is not  a waste of time!
+  description: Just another basic attack
