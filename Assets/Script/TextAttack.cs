@@ -34,7 +34,7 @@ public class TextAttack : MonoBehaviour
                 break;
         }
 
-        for (float timer = 0; timer < 1; timer += Time.deltaTime * 2) 
+        for (float timer = 0; timer < 1; timer += 0.016f) 
         {
             transform.position = Vector3.Lerp(startPos, startPos + new Vector3(0, 200, 0), timer);
             transform.localScale = Vector3.Lerp(Vector3.zero,Vector3.one, timer);
@@ -44,7 +44,7 @@ public class TextAttack : MonoBehaviour
         {
             startPos = transform.position;
             float alpha = 1.0f;
-            for (float timer = 0; timer < 1; timer += Time.deltaTime * 2) 
+            for (float timer = 0; timer < 1; timer += 0.016f) 
             {
                 transform.position = Vector3.Lerp(startPos, startPos + new Vector3(0, 200, 0), timer);
                 transform.localScale = Vector3.Lerp(Vector3.one, Vector3.one*2, timer);
@@ -56,7 +56,7 @@ public class TextAttack : MonoBehaviour
         else
         {
             startPos = transform.position;
-            for (float timer = 0; timer < 1; timer += Time.deltaTime * 2)
+            for (float timer = 0; timer < 1; timer += 0.016f)
             {
                 transform.position = Vector3.Lerp(startPos, enemyPos, timer);
                 await Task.Delay(16); // should give 60fps

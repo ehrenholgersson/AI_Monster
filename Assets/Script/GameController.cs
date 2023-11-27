@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 //public enum Turn {Player, AI }
 
@@ -13,6 +14,7 @@ public class GameController : MonoBehaviour
     public static GameController main;
     [SerializeField] List<Attack> _permanentActions;
     [SerializeField] List<Attack> _tempActions;
+    [SerializeField] GameObject _menu;
     bool _playerTurn;
     public Monster Turn { get => _playerTurn?_player : _opponent; }
     public static Action OnNewTurn;
@@ -32,6 +34,19 @@ public class GameController : MonoBehaviour
     {
         OnNewTurn += AnnounceTurn;
         DelayedStart();
+    }
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            ToggleMenu();
+        }
+    }
+
+    public void Exit()
+    {
+        SceneManager.LoadScene(0);
     }
 
     async void DelayedStart()
@@ -80,5 +95,10 @@ public class GameController : MonoBehaviour
         UIText.DisplayText(Turn.name + " Turn");
         UIText.LogText("Its " + Turn.name + "s Turn");
         await Task.Delay(1000);
+    }
+
+    public void ToggleMenu()
+    {
+        _menu.SetActive(!_menu.activeSelf);
     }
 }

@@ -48,7 +48,7 @@ public class ActionButton : MonoBehaviour
     {
         _blobPos = GameObject.Find("PlayerBlob").transform.position;
         _enemyPos = GameObject.Find("EnemyBlob").transform.position;
-        _canvas = GameObject.Find("AttackCanvas");
+        _canvas = GameObject.Find("Canvas");
 
         if (_action == null)
             _action = GameController.GetNewAction();
