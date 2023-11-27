@@ -17,9 +17,11 @@ MonoBehaviour:
   cost: 3
   health: 0
   ap: 0
+  defence: 2
   modifiers:
   - _hp: 0
     _ap: 0
     _def: 2
-    _duration: 4
+    _duration: 1
   description: 
+  type: 2

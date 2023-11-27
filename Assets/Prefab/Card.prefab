@@ -311,6 +311,7 @@ MonoBehaviour:
   AtkCol: {r: 0.6981132, g: 0.010976552, b: 0.010976552, a: 0.78431374}
   _button: {fileID: 7500051320575436445}
   _action: {fileID: 0}
+  _animatedText: {fileID: 2108645602514350782, guid: 6d2c0ae567171df40b26cc78d07e701b, type: 3}
 --- !u!1 &5036033576377292713
 GameObject:
   m_ObjectHideFlags: 0

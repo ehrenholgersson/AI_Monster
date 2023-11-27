@@ -17,5 +17,7 @@ MonoBehaviour:
   cost: 3
   health: 20
   ap: 0
+  defence: 0
   modifiers: []
   description: 
+  type: 3

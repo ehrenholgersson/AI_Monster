@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -14,6 +15,12 @@ public class ActionButton : MonoBehaviour
 
     [SerializeField] Button _button;
     [SerializeField] Attack _action;
+    [SerializeField] GameObject _animatedText;
+
+    Vector3 _blobPos;
+    Vector3 _enemyPos;
+    GameObject _canvas;
+
     public void Click()
     {
         Monster player = GameController.GetPlayer();
@@ -24,6 +31,9 @@ public class ActionButton : MonoBehaviour
                 player.ApplyAction(_action);
             else
                 GameController.GetOpponent().Defend(_action);
+
+            GameObject gO = Instantiate(_animatedText,_canvas.transform);
+            gO.GetComponent<TextAttack>().AttackAnimation(_blobPos, _enemyPos, _action);
 
             if (!_action.permanent)
                 Destroy(this.gameObject);
@@ -36,6 +46,10 @@ public class ActionButton : MonoBehaviour
     }
     public void Start()
     {
+        _blobPos = GameObject.Find("PlayerBlob").transform.position;
+        _enemyPos = GameObject.Find("EnemyBlob").transform.position;
+        _canvas = GameObject.Find("AttackCanvas");
+
         if (_action == null)
             _action = GameController.GetNewAction();
         transform.Find("Title").GetComponentInChildren<TextMeshProUGUI>().text = _action.name;

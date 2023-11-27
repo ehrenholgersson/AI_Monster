@@ -12,10 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8b5ad509474a9bf41ab1498ec8975c0c, type: 3}
   m_Name: Scratch
   m_EditorClassIdentifier: 
-  permanent: 1
+  permanent: 0
   targetSelf: 0
   cost: 1
   health: -5
   ap: 0
+  defence: 0
   modifiers: []
   description: Just another basic attack
+  type: 0

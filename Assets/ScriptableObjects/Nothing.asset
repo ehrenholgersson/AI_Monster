@@ -17,9 +17,11 @@ MonoBehaviour:
   cost: 2
   health: 0
   ap: 0
+  defence: 0
   modifiers:
   - _hp: 0
     _ap: 1
     _def: 0
     _duration: 5
   description: Chill out for a bit (Restore 1 extra AP for the next 5 turns for resting)
+  type: 2

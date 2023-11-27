@@ -12,9 +12,19 @@ public class Ai : MonoBehaviour
 
     Attack[] _hand = new Attack[4];
     Monster _self;
+
+    Vector3 _blobPos;
+    Vector3 _enemyPos;
+    GameObject _canvas;
+    [SerializeField] GameObject _animatedText;
+
     // Start is called before the first frame update
     void Start()
     {
+        _blobPos = GameObject.Find("EnemyBlob").transform.position;
+        _enemyPos = GameObject.Find("PlayerBlob").transform.position;
+        _canvas = GameObject.Find("Canvas");
+
         _self = GameController.GetOpponent();
         int i = 0;
         foreach (Attack action in GameController.GetFixedActions())
@@ -43,11 +53,14 @@ public class Ai : MonoBehaviour
             int healWeight = 1;
             int buffWeight = 1;
             int defenceWeight = 1;
-            int attackWeight = 1;
+            int attackWeight = 4;
             // weight each state based on factors (health, opponent health, buffs)
             if (_self.Health <= 50)
             {
                 healWeight += 2 + (5 - _self.Health / 10);
+            } else if (_self.Health > 150)
+            {
+                healWeight = 0;
             }
             if (_self.Modifiers < 2)
             {
@@ -110,12 +123,12 @@ public class Ai : MonoBehaviour
             case AIStates.Buff:
                 while (true)
                 {
-                    await Task.Delay(1000);
+                    await Task.Delay(1500);
                     UIText.LogText("Your opponent looks to increase their strength");
                 Begin:
                     await Task.Delay(3000);
 
-                    Attack.AtkType[] toPlay = new Attack.AtkType[3] { Attack.AtkType.Buff, Attack.AtkType.Defense, Attack.AtkType.Heal };
+                    Attack.AtkType[] toPlay = new Attack.AtkType[3] { Attack.AtkType.Buff,  Attack.AtkType.Defense, Attack.AtkType.Offense };
                     int card = Random.Range(0, _hand.Length);
 
                     for (int i = 0; i < toPlay.Length; i++)
@@ -129,12 +142,15 @@ public class Ai : MonoBehaviour
                                     if (_hand[(card + j) % _hand.Length].targetSelf)
                                     {
                                         _self.ApplyAction(_hand[newcard]);
-                                        if (!_hand[newcard].permanent)
-                                            _hand[newcard] = null;
-
                                     }
                                     else
                                         GameController.GetPlayer().Defend(_hand[newcard]);
+
+                                    GameObject gO = Instantiate(_animatedText, _canvas.transform);
+                                    gO.GetComponent<TextAttack>().AttackAnimation(_blobPos, _enemyPos, _hand[newcard]);
+
+                                    if (!_hand[newcard].permanent)
+                                        _hand[newcard] = null;
                                     goto Begin;
                                 }
                                 else
@@ -150,7 +166,7 @@ public class Ai : MonoBehaviour
             case AIStates.Attack:
                 while (true)
                 {
-                    await Task.Delay(1000);
+                    await Task.Delay(1500);
                     UIText.LogText("Your opponent goes on the attack!");
                 Begin:
                     await Task.Delay(3000);
@@ -169,12 +185,15 @@ public class Ai : MonoBehaviour
                                     if (_hand[(card + j) % _hand.Length].targetSelf)
                                     {
                                         _self.ApplyAction(_hand[newcard]);
-                                        if (!_hand[newcard].permanent)
-                                            _hand[newcard] = null;
-
                                     }
                                     else
                                         GameController.GetPlayer().Defend(_hand[newcard]);
+
+                                    GameObject gO = Instantiate(_animatedText, _canvas.transform);
+                                    gO.GetComponent<TextAttack>().AttackAnimation(_blobPos, _enemyPos, _hand[newcard]);
+
+                                    if (!_hand[newcard].permanent)
+                                        _hand[newcard] = null;
                                     goto Begin;
                                 }
                                 else
@@ -189,12 +208,12 @@ public class Ai : MonoBehaviour
             case AIStates.Defend:
                 while (true)
                 {
-                    await Task.Delay(1000);
+                    await Task.Delay(1500);
                     UIText.LogText("Your opponent goes on the defensive");
                 Begin:
                     await Task.Delay(3000);
 
-                    Attack.AtkType[] toPlay = new Attack.AtkType[3] { Attack.AtkType.Defense,Attack.AtkType.Heal,Attack.AtkType.Buff };
+                    Attack.AtkType[] toPlay = new Attack.AtkType[3] { Attack.AtkType.Defense,Attack.AtkType.Buff,Attack.AtkType.Offense };
                     int card = Random.Range(0, _hand.Length);
 
                     for (int i = 0; i < toPlay.Length; i++)
@@ -208,12 +227,15 @@ public class Ai : MonoBehaviour
                                     if (_hand[(card + j) % _hand.Length].targetSelf)
                                     {
                                         _self.ApplyAction(_hand[newcard]);
-                                        if (!_hand[newcard].permanent)
-                                            _hand[newcard] = null;
-
                                     }
                                     else
                                         GameController.GetPlayer().Defend(_hand[newcard]);
+
+                                    GameObject gO = Instantiate(_animatedText, _canvas.transform);
+                                    gO.GetComponent<TextAttack>().AttackAnimation(_blobPos, _enemyPos, _hand[newcard]);
+
+                                    if (!_hand[newcard].permanent)
+                                        _hand[newcard] = null;
                                     goto Begin;
                                 }
                                 else
@@ -228,7 +250,7 @@ public class Ai : MonoBehaviour
             case AIStates.Heal:
                 while (true)
                 {
-                    await Task.Delay(1000);
+                    await Task.Delay(1500);
                     UIText.LogText("Your opponent licks their wounds!");
                 Begin:
                     await Task.Delay(3000);
@@ -247,12 +269,15 @@ public class Ai : MonoBehaviour
                                     if (_hand[(card + j) % _hand.Length].targetSelf)
                                     {
                                         _self.ApplyAction(_hand[newcard]);
-                                        if (!_hand[newcard].permanent)
-                                            _hand[newcard] = null;
-
                                     }
                                     else
                                         GameController.GetPlayer().Defend(_hand[newcard]);
+
+                                    GameObject gO = Instantiate(_animatedText, _canvas.transform);
+                                    gO.GetComponent<TextAttack>().AttackAnimation(_blobPos, _enemyPos, _hand[newcard]);
+
+                                    if (!_hand[newcard].permanent)
+                                        _hand[newcard] = null;
                                     goto Begin;
                                 }
                                 else
