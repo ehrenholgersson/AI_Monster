@@ -105,6 +105,16 @@ public class Ai : MonoBehaviour
 
     void DrawCards()
     {
+        {
+            int i = 0;
+            foreach (Attack action in GameController.GetFixedActions())
+            {
+                if (i >= _hand.Length)
+                    break;
+                _hand[i] = action;
+                i++;
+            }
+        }
         for (int i = 0; i < _hand.Length; i++)
         {
             if (_hand[i] == null)
@@ -169,8 +179,8 @@ public class Ai : MonoBehaviour
                             GameObject gO = Instantiate(_animatedText, _canvas.transform);
                             gO.GetComponent<TextAttack>().AttackAnimation(_blobPos, _enemyPos, _hand[newcard]);
 
-                            if (!_hand[newcard].permanent)
-                                _hand[newcard] = null;
+                            //if (!_hand[newcard].permanent)
+                            _hand[newcard] = null;
                             goto Begin;
                         }
                         else

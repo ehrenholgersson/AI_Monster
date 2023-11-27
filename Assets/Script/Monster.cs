@@ -91,6 +91,10 @@ public class Monster : MonoBehaviour
                 }
             }
         }
+        if (_health <= 0)
+        {
+            GameController.main.EndTurn(this);
+        }
     }
 
     // Update is called once per frame

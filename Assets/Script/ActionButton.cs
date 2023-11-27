@@ -27,6 +27,7 @@ public class ActionButton : MonoBehaviour
         if (GameController.main.Turn == player &&  player.ActionCost(_action.cost))
         {
             UIText.LogText("Player used " + _action.name);
+            _button.interactable = false;
             if (_action.targetSelf)
                 player.ApplyAction(_action);
             else
@@ -40,6 +41,12 @@ public class ActionButton : MonoBehaviour
         }
     }
 
+    void Restore()
+    {
+        if (GameController.main.Turn == GameController.GetPlayer())
+            _button.interactable = true;
+    }
+
     public void SetAction(Attack action)
     {
         _action = action;
@@ -49,6 +56,8 @@ public class ActionButton : MonoBehaviour
         _blobPos = GameObject.Find("PlayerBlob").transform.position;
         _enemyPos = GameObject.Find("EnemyBlob").transform.position;
         _canvas = GameObject.Find("Canvas");
+
+        GameController.OnNewTurn += Restore;
 
         if (_action == null)
             _action = GameController.GetNewAction();
@@ -79,5 +88,10 @@ public class ActionButton : MonoBehaviour
                 }
             }
         }
+    }
+
+    private void OnDestroy()
+    {
+        GameController.OnNewTurn -= Restore;
     }
 }

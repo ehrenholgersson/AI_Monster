@@ -16,6 +16,7 @@ public class GameController : MonoBehaviour
     [SerializeField] List<Attack> _tempActions;
     [SerializeField] GameObject _menu;
     bool _playerTurn;
+    bool _gameOver;
     public Monster Turn { get => _playerTurn?_player : _opponent; }
     public static Action OnNewTurn;
 
@@ -24,10 +25,16 @@ public class GameController : MonoBehaviour
     // Start is called before the first frame update
     void Awake()
     {
+        _gameOver = false;
         if (main == null)
             main = this;
         else if (main!=this)
             Destroy(this);
+
+        if (UnityEngine.Random.Range(0, 2) > 0) 
+        {
+            _playerTurn = true;
+        }
     }
 
     private void Start()
@@ -67,11 +74,27 @@ public class GameController : MonoBehaviour
 
     public void EndTurn(Monster requestor)
     {
-        if (requestor == Turn)
+        if (_player.Health <= 0)
+            GameOver("Opponent");
+        else if (_opponent.Health <= 0)
+            GameOver("Player");
+
+        if (requestor == Turn && !_gameOver)
         {
             _playerTurn = !_playerTurn;
             OnNewTurn?.Invoke();
         }
+    }
+
+    async void GameOver(string winner)
+    {
+        _gameOver = true;
+        await Task.Delay(2000);
+        UIText.DisplayText("Game Over",2);
+        await Task.Delay(2000);
+        UIText.DisplayText(winner +" Wins!", 2);
+        await Task.Delay(2000);
+        ToggleMenu();
     }
 
     public static List<Attack> GetFixedActions()
@@ -99,6 +122,13 @@ public class GameController : MonoBehaviour
 
     public void ToggleMenu()
     {
-        _menu.SetActive(!_menu.activeSelf);
+        
+        if (_gameOver)
+        {
+            _menu.SetActive(true);
+            _menu.transform.Find("Continue").gameObject.SetActive(false);
+        }
+        else
+            _menu.SetActive(!_menu.activeSelf);
     }
 }
